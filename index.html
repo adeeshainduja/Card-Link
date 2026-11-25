@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#140b24" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Happy 24th Birthday, Chamudi Kavindya ♡</title>
+  <link rel="icon" type="image/svg+xml" href="assets/illustrations/favicon.svg" />
+
+  <!-- Elegant serif, handwritten script, and clean sans fonts with safe system fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Atmospheric Background & FX Canvases -->
+    <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+    <div id="butterfly-layer" class="butterfly-layer" aria-hidden="true"></div>
+    <canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+    <!-- Subtle Top Progress & Audio Control -->
+    <header class="top-chrome">
+      <nav id="progress-stars" class="progress-stars" aria-label="Story progress"></nav>
+      <button id="audio-toggle-btn" class="audio-toggle-btn" type="button" aria-label="Toggle music and sound effects" title="Toggle Music">
+        <svg id="audio-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+        <svg id="audio-icon-playing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Floating Whisper Toast for Easter Eggs & Discoveries -->
+    <div id="whisper-toast" class="whisper-toast" role="status" aria-live="polite">
+      <span id="whisper-kicker" class="whisper-kicker">A little secret</span>
+      <p id="whisper-text" class="whisper-text"></p>
+    </div>
+
+    <!-- Subtle Hidden Heart Easter Egg -->
+    <button id="hidden-heart-trigger" class="hidden-heart-trigger" type="button" aria-label="A hidden heart">
+      <svg viewBox="0 0 32 32" width="22" height="22">
+        <path d="M16 27 C16 27 4 19 4 11.5 C4 7.5 7 4.5 10.8 4.5 C13 4.5 14.9 5.6 16 7.3 C17.1 5.6 19 4.5 21.2 4.5 C25 4.5 28 7.5 28 11.5 C28 19 16 27 16 27 Z" fill="#f28cb1"/>
+      </svg>
+    </button>
+
+    <!-- 10 Story Scenes -->
+    <main class="scenes-viewport" id="scenes-viewport">
+      <!-- SCENE 01: A Mysterious Surprise -->
+      <section class="scene is-active" id="scene-0" data-chapter="I · The Invitation">
+        <div class="scene-inner">
+          <div id="scene01-moon" class="moon-backdrop" role="button" aria-label="Glowing moon">
+            <svg viewBox="0 0 96 96" width="96" height="96">
+              <defs>
+                <radialGradient id="s1Moon" cx="45%" cy="45%" r="50%">
+                  <stop offset="0%" stop-color="#fff8e3"/>
+                  <stop offset="65%" stop-color="#f3d59b"/>
+                  <stop offset="100%" stop-color="rgba(243,213,155,0)"/>
+                </radialGradient>
+              </defs>
+              <circle cx="48" cy="48" r="44" fill="url(#s1Moon)" opacity="0.45"/>
+              <circle cx="48" cy="48" r="24" fill="#fae6b4"/>
+              <circle cx="41" cy="43" r="3.5" fill="rgba(212,174,116,0.35)"/>
+              <circle cx="55" cy="54" r="4.8" fill="rgba(212,174,116,0.28)"/>
+            </svg>
+          </div>
+
+          <p id="s1-pre" class="scene01-pre"></p>
+
+          <div id="envelope-stage" class="envelope-stage" role="button" tabindex="0" aria-label="Sealed envelope for Chamudi"></div>
+
+          <div class="scene01-address">
+            <h1 id="s1-to" class="scene01-to"></h1>
+            <p id="s1-from" class="scene01-from"></p>
+          </div>
+
+          <button id="open-surprise-btn" class="magic-btn" type="button">Open Your Surprise ♡</button>
+
+          <div class="sound-opt-row">
+            <button id="s1-sound-opt" class="sound-pill active" type="button">♪ Music &amp; Sounds: On when opened</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 02: The Birthday Universe -->
+      <section class="scene" id="scene-1" data-chapter="II · The Universe">
+        <div class="scene-inner universe-stage">
+          <div id="constellation-wrap" class="constellation-wrap"></div>
+          <h1 id="s2-name" class="name-letter-reveal" aria-label="Chamudi Kavindya"></h1>
+          <h2 id="s2-headline" class="universe-headline"></h2>
+          <div class="universe-copy">
+            <p id="s2-line1"></p>
+            <p id="s2-line2"></p>
+          </div>
+          <button id="s2-continue-star" class="continue-star-btn" type="button" aria-label="Touch the glowing star to continue">
+            <span class="continue-star-orb">
+              <svg viewBox="0 0 36 36" width="28" height="28">
+                <path d="M18 3 L21.8 13.4 L33 14.2 L24.2 21.1 L27.1 32 L18 25.8 L8.9 32 L11.8 21.1 L3 14.2 L14.2 13.4 Z" fill="#f3d59b"/>
+              </svg>
+            </span>
+            <span id="s2-hint" class="subtle-hint"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCENE 03: 24 Flowers for 24 Beautiful Years -->
+      <section class="scene" id="scene-2" data-chapter="III · 24 Blooms">
+        <div class="scene-inner">
+          <h2 id="s3-title" class="scene-title"></h2>
+          <p id="s3-subtitle" class="scene-sub"></p>
+
+          <div class="garden-hud">
+            <span id="bloom-counter" class="bloom-counter">0 / 24 Bloomed</span>
+            <button id="bloom-all-btn" class="garden-quick-btn" type="button">Bloom All ✨</button>
+          </div>
+
+          <div id="garden-stage" class="garden-stage" aria-label="Interactive magical flower garden">
+            <div class="garden-ground-glow"></div>
+          </div>
+
+          <div class="flower-wish-card" id="flower-wish-card">
+            <p class="flower-wish-title" id="flower-wish-title">Touch the glowing earth</p>
+            <p class="flower-wish-note" id="flower-wish-note">Each flower holds a birthday wish from Adeesha.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 04: Our Little Universe -->
+      <section class="scene" id="scene-3" data-chapter="IV · Little Universe">
+        <div class="scene-inner">
+          <h2 id="s4-title" class="scene-title"></h2>
+          <p id="s4-hint" class="scene-sub"></p>
+          <div id="universe-scene-frame" class="universe-scene-frame"></div>
+          <div id="scene04-msg-box" class="scene04-msg-box">
+            Tap the moon, the shooting star, the fireflies, or the lake...
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 05: My Future Doctor -->
+      <section class="scene" id="scene-4" data-chapter="V · Future Doctor">
+        <div class="scene-inner">
+          <div id="doctor-stage" class="doctor-stage"></div>
+
+          <div id="doctor-badge-pill" class="doctor-badge-pill"></div>
+          <div id="ecg-container"></div>
+
+          <button id="doc-transform-btn" class="magic-btn" type="button" style="margin:6px 0 8px; padding:10px 22px; font-size:15px;">
+            Witness Her Journey ✨
+          </button>
+
+          <div id="doctor-story-box" class="doctor-story-box"></div>
+        </div>
+      </section>
+
+      <!-- SCENE 06: A Special Birthday Prescription -->
+      <section class="scene" id="scene-5" data-chapter="VI · Prescription">
+        <div class="scene-inner">
+          <h2 class="scene-title" style="margin-bottom:8px;">A Special Birthday Prescription</h2>
+          <article class="rx-paper" id="rx-paper">
+            <!-- Animated fountain pen nib -->
+            <svg id="rx-pen-nib" class="rx-pen-nib" viewBox="0 0 36 36" aria-hidden="true">
+              <path d="M6 30 L12 14 L26 4 L32 10 L22 24 Z" fill="#c9954c" stroke="#533845" stroke-width="1.2"/>
+              <circle cx="16" cy="20" r="1.8" fill="#533845"/>
+            </svg>
+
+            <div class="rx-header">
+              <span class="rx-symbol">℞</span>
+              <div class="rx-clinic">
+                <div>Department of Love &amp; Care</div>
+                <div id="rx-date">26 November 2026</div>
+              </div>
+            </div>
+
+            <div class="rx-meta">
+              <div><strong>Patient:</strong> <span id="rx-patient"></span></div>
+              <div><strong>Prescribed with love by:</strong> <span id="rx-prescriber"></span></div>
+            </div>
+
+            <ul id="rx-list" class="rx-list"></ul>
+
+            <div class="rx-footer">
+              <div><strong>Duration:</strong> <span id="rx-duration"></span></div>
+              <div><strong>Side effects:</strong> <span id="rx-side-effects"></span></div>
+              <div><strong>Refills:</strong> <span id="rx-refills"></span></div>
+            </div>
+
+            <div id="rx-stamp-wrap"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SCENE 07: Interactive Birthday Cake -->
+      <section class="scene" id="scene-6" data-chapter="VII · Birthday Wish">
+        <div class="scene-inner">
+          <div id="cake-stage" class="cake-stage">
+            <div class="cake-glow-halo"></div>
+            <div id="cake-svg-wrap" style="width:100%; height:100%;"></div>
+          </div>
+
+          <p id="cake-prompts" class="cake-prompts"></p>
+          <button id="blow-candles-btn" class="magic-btn" type="button">Blow Out the Candles</button>
+        </div>
+      </section>
+
+      <!-- SCENE 08: A Secret Love Letter -->
+      <section class="scene" id="scene-7" data-chapter="VIII · Love Letter">
+        <div class="scene-inner letter-stage">
+          <h2 class="scene-title" style="margin-bottom:8px;">A Secret Love Letter</h2>
+
+          <div id="letter-sealed-box" class="letter-sealed-box" role="button" tabindex="0">
+            <svg viewBox="0 0 120 82" width="110" height="75" aria-hidden="true">
+              <rect x="8" y="10" width="104" height="62" rx="10" fill="#fdf4ea" stroke="#e5be7d" stroke-width="1.5"/>
+              <path d="M8 12 L60 46 L112 12" fill="none" stroke="#d6b4a4" stroke-width="1.5"/>
+              <circle cx="60" cy="45" r="11" fill="#c94572"/>
+              <path d="M60 50 C60 50 54 46 54 42.5 C54 40.5 55.5 39 57.5 39 C58.7 39 59.6 39.7 60 40.5 C60.4 39.7 61.3 39 62.5 39 C64.5 39 66 40.5 66 42.5 C66 46 60 50 60 50 Z" fill="#ffdce7"/>
+            </svg>
+            <p id="letter-tap-hint" class="subtle-hint" style="margin-top:6px;"></p>
+          </div>
+
+          <article id="letter-paper" class="letter-paper">
+            <div id="letter-body" class="letter-body"></div>
+            <div id="letter-signature-wrap" class="letter-signature-wrap" title="Touch signature">
+              <span style="font-family:var(--font-serif); font-style:italic; font-size:13px; color:#7c5674;">Always yours,</span>
+              <div id="letter-signature-svg-wrap"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SCENE 09: A Virtual Hug -->
+      <section class="scene" id="scene-8" data-chapter="IX · Virtual Hug">
+        <div class="scene-inner">
+          <h2 id="s9-title" class="scene-title"></h2>
+          <div id="hug-stage" class="hug-stage"></div>
+          <button id="hug-btn" class="magic-btn" type="button">I Need a Hug</button>
+          <div id="hug-message-box" class="hug-message-box"></div>
+        </div>
+      </section>
+
+      <!-- SCENE 10: The Grand Finale -->
+      <section class="scene" id="scene-9" data-chapter="X · Forever Yours">
+        <div class="scene-inner">
+          <div id="finale-stage" class="finale-stage"></div>
+
+          <div class="finale-titles">
+            <h2 id="s10-line1"></h2>
+            <h1 id="s10-line2"></h1>
+            <p id="s10-line3" class="finale-tagline"></p>
+          </div>
+
+          <div class="finale-credits">
+            <div id="s10-credit1"></div>
+            <div id="s10-credit2" class="glow-gold"></div>
+          </div>
+
+          <div class="finale-actions">
+            <button id="last-secret-btn" class="magic-btn" type="button"></button>
+            <button id="photos-btn" class="replay-btn" type="button" style="display:none;">Our Memories ♡</button>
+            <button id="replay-btn" class="replay-btn" type="button"></button>
+          </div>
+
+          <div id="finale-secret-box" class="finale-secret-box">
+            <p id="s10-secret1" style="margin:0 0 6px;"></p>
+            <p id="s10-secret2" class="glow-rose" style="margin:0; font-weight:600;"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Subtle Cinematic Bottom Navigation -->
+    <footer class="bottom-nav">
+      <button id="prev-scene-btn" class="nav-pill is-hidden" type="button" aria-label="Previous scene">‹ Prev</button>
+      <span id="scene-chapter-tag" class="scene-chapter-tag">I · The Invitation</span>
+      <button id="next-scene-btn" class="nav-pill" type="button" aria-label="Next scene">Next ›</button>
+    </footer>
+
+    <!-- Optional Personal Photos Modal (only shown if photos[] is populated in config.js) -->
+    <div id="photos-modal" class="photos-modal" role="dialog" aria-modal="true" aria-label="Personal Memories">
+      <div class="photos-modal-card">
+        <h3 class="scene-title" style="font-size:28px;">Our Memories</h3>
+        <div id="photos-grid" class="photos-grid"></div>
+        <button id="close-photos-btn" class="replay-btn" type="button" style="margin-top:14px;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Local GSAP + Modular App Scripts -->
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/illustrations.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

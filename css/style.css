@@ -1,0 +1,1512 @@
+/* ============================================================================
+   MAGICAL BIRTHDAY SURPRISE — CHAMUDI KAVINDYA (24TH BIRTHDAY)
+   Palette: Midnight Purple, Rose Pink, Lavender, Champagne Gold, Ivory
+   Mobile-first target: 390 x 844 (iPhone 14) + responsive tablet/desktop
+   ============================================================================ */
+
+:root {
+  --bg-midnight: #140b24;
+  --bg-velvet: #211138;
+  --bg-plum: #2e174b;
+  --rose-pink: #f28cb1;
+  --rose-deep: #d95f8b;
+  --soft-blush: #f9c6d7;
+  --lavender: #c8b6ff;
+  --champagne-gold: #f3d59b;
+  --gold-warm: #d9a75c;
+  --ivory: #fdf8f2;
+  --ivory-muted: rgba(253, 248, 242, 0.78);
+
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-script: "Great Vibes", "Brush Script MT", cursive;
+  --font-hand: "Dancing Script", "Brush Script MT", cursive;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-midnight);
+  color: var(--ivory);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+/* ============================================================================
+   GLOBAL ATMOSPHERE & CANVAS LAYERS
+   ============================================================================ */
+
+.app-shell {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(200, 182, 255, 0.14) 0%, transparent 48%),
+    radial-gradient(circle at 80% 78%, rgba(242, 140, 177, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 20% 60%, rgba(243, 213, 155, 0.08) 0%, transparent 45%),
+    linear-gradient(170deg, #0d0618 0%, var(--bg-midnight) 45%, var(--bg-velvet) 100%);
+}
+
+#ambient-canvas,
+#fx-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#ambient-canvas {
+  z-index: 1;
+}
+
+#fx-canvas {
+  z-index: 45;
+}
+
+.butterfly-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 32;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.interactive-butterfly {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  padding: 4px;
+  margin: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 0 8px rgba(242, 140, 177, 0.55));
+  transition: transform 0.25s ease;
+}
+
+.interactive-butterfly:active {
+  transform: scale(1.22);
+}
+
+.butterfly-wing-l,
+.butterfly-wing-r {
+  transform-origin: center;
+  animation: wingFlutter 0.42s ease-in-out infinite alternate;
+}
+
+.butterfly-wing-r {
+  animation-direction: alternate-reverse;
+}
+
+@keyframes wingFlutter {
+  0% { transform: scaleX(1) rotate(0deg); }
+  100% { transform: scaleX(0.45) rotate(6deg); }
+}
+
+/* ============================================================================
+   CHROME: PROGRESS INDICATOR, AUDIO BUTTON, SUBTLE SCENE NAV
+   ============================================================================ */
+
+.top-chrome {
+  position: fixed;
+  top: calc(10px + var(--safe-top));
+  left: calc(14px + var(--safe-left));
+  right: calc(14px + var(--safe-right));
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.progress-stars {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(20, 11, 36, 0.56);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(243, 213, 155, 0.22);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.progress-dot {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.42;
+  transition: transform 0.3s var(--ease-cinematic), opacity 0.3s ease;
+}
+
+.progress-dot svg {
+  width: 11px;
+  height: 11px;
+  fill: var(--lavender);
+  transition: fill 0.3s ease, filter 0.3s ease;
+}
+
+.progress-dot.completed {
+  opacity: 0.85;
+}
+
+.progress-dot.completed svg {
+  fill: var(--rose-pink);
+}
+
+.progress-dot.active {
+  opacity: 1;
+  transform: scale(1.35);
+}
+
+.progress-dot.active svg {
+  fill: var(--champagne-gold);
+  filter: drop-shadow(0 0 6px rgba(243, 213, 155, 0.9));
+}
+
+.audio-toggle-btn {
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(243, 213, 155, 0.35);
+  background: rgba(25, 13, 44, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--champagne-gold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.audio-toggle-btn:active {
+  transform: scale(0.92);
+}
+
+.audio-toggle-btn.is-playing {
+  border-color: rgba(242, 140, 177, 0.7);
+  box-shadow: 0 0 18px rgba(242, 140, 177, 0.35);
+}
+
+.audio-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: calc(12px + var(--safe-bottom));
+  left: calc(16px + var(--safe-left));
+  right: calc(16px + var(--safe-right));
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.nav-pill {
+  pointer-events: auto;
+  min-width: 44px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 213, 155, 0.24);
+  background: rgba(20, 11, 36, 0.62);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--ivory-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.nav-pill:hover,
+.nav-pill:active {
+  color: var(--ivory);
+  border-color: rgba(243, 213, 155, 0.55);
+}
+
+.nav-pill.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scene-chapter-tag {
+  pointer-events: none;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(243, 213, 155, 0.72);
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+/* ============================================================================
+   TOAST / DISCOVERY MESSAGE OVERLAY
+   ============================================================================ */
+
+.whisper-toast {
+  position: fixed;
+  bottom: calc(64px + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 80;
+  width: min(88vw, 356px);
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: rgba(29, 15, 51, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(243, 213, 155, 0.42);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55), 0 0 24px rgba(242, 140, 177, 0.22);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-cinematic), transform 0.4s var(--ease-cinematic);
+}
+
+.whisper-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.whisper-toast .whisper-kicker {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--champagne-gold);
+  margin-bottom: 4px;
+}
+
+.whisper-toast .whisper-text {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ivory);
+}
+
+/* ============================================================================
+   SCENE STAGE & TYPOGRAPHY
+   ============================================================================ */
+
+.scenes-viewport {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(58px + var(--safe-top)) calc(18px + var(--safe-right)) calc(62px + var(--safe-bottom)) calc(18px + var(--safe-left));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.scene::-webkit-scrollbar {
+  display: none;
+}
+
+.scene.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.scene-inner {
+  width: 100%;
+  max-width: 440px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.font-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+}
+
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.glow-gold {
+  color: var(--champagne-gold);
+  text-shadow: 0 0 18px rgba(243, 213, 155, 0.45);
+}
+
+.glow-rose {
+  color: var(--soft-blush);
+  text-shadow: 0 0 20px rgba(242, 140, 177, 0.5);
+}
+
+.magic-btn {
+  position: relative;
+  min-height: 48px;
+  padding: 13px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 213, 155, 0.55);
+  background: linear-gradient(135deg, rgba(242, 140, 177, 0.28), rgba(200, 182, 255, 0.22));
+  color: var(--ivory);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38), 0 0 22px rgba(242, 140, 177, 0.28);
+  transition: transform 0.28s var(--ease-cinematic), box-shadow 0.28s ease, border-color 0.28s ease;
+  overflow: hidden;
+}
+
+.magic-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%);
+  transform: translateX(-120%);
+  animation: shimmerSweep 3.8s ease-in-out infinite;
+}
+
+.magic-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes shimmerSweep {
+  0%, 45% { transform: translateX(-120%); }
+  75%, 100% { transform: translateX(120%); }
+}
+
+.subtle-hint {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(200, 182, 255, 0.78);
+  margin: 8px 0 0;
+  animation: gentlePulse 2.6s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.58; }
+  50% { opacity: 1; }
+}
+
+/* ============================================================================
+   SCENE 01 — MYSTERIOUS SURPRISE ENVELOPE
+   ============================================================================ */
+
+.moon-backdrop {
+  position: absolute;
+  top: -48px;
+  right: 4px;
+  width: 78px;
+  height: 78px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+  filter: drop-shadow(0 0 22px rgba(243, 213, 155, 0.45));
+}
+
+.moon-backdrop svg {
+  width: 100%;
+  height: 100%;
+}
+
+.scene01-pre {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--lavender);
+  margin: 18px 0 14px;
+  opacity: 0;
+}
+
+.envelope-stage {
+  position: relative;
+  width: min(82vw, 310px);
+  height: 215px;
+  margin: 8px auto 18px;
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.envelope-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 20px 34px rgba(0, 0, 0, 0.55));
+}
+
+.envelope-flap {
+  transform-origin: 155px 38px;
+  transition: transform 0.9s var(--ease-cinematic);
+}
+
+.envelope-stage.is-opened .envelope-flap {
+  transform: rotateX(165deg);
+}
+
+.wax-seal-group {
+  transform-origin: 155px 118px;
+  transition: transform 0.55s var(--ease-cinematic), opacity 0.45s ease;
+}
+
+.envelope-stage.is-opened .wax-seal-group {
+  transform: scale(1.25) rotate(-12deg);
+  opacity: 0;
+}
+
+.envelope-card-peek {
+  transition: transform 0.9s var(--ease-cinematic);
+}
+
+.envelope-stage.is-opened .envelope-card-peek {
+  transform: translateY(-56px);
+}
+
+.scene01-address {
+  margin: 4px 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scene01-to {
+  font-family: var(--font-script);
+  font-size: 34px;
+  line-height: 1.15;
+  color: var(--champagne-gold);
+  margin: 0;
+  opacity: 0;
+}
+
+.scene01-from {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--soft-blush);
+  margin: 0;
+  opacity: 0;
+}
+
+.sound-opt-row {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ivory-muted);
+}
+
+.sound-pill {
+  border: 1px solid rgba(200, 182, 255, 0.35);
+  background: rgba(33, 17, 56, 0.65);
+  color: var(--ivory);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sound-pill.active {
+  border-color: var(--champagne-gold);
+  color: var(--champagne-gold);
+}
+
+/* ============================================================================
+   SCENE 02 — THE BIRTHDAY UNIVERSE
+   ============================================================================ */
+
+.universe-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.constellation-wrap {
+  position: relative;
+  width: min(88vw, 340px);
+  height: 225px;
+  margin: 0 auto 8px;
+}
+
+.constellation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.num24-hitbox {
+  cursor: pointer;
+}
+
+.name-letter-reveal {
+  font-family: var(--font-script);
+  font-size: clamp(36px, 9.5vw, 48px);
+  line-height: 1.15;
+  color: var(--champagne-gold);
+  text-shadow: 0 0 24px rgba(243, 213, 155, 0.55);
+  margin: 2px 0 4px;
+  min-height: 48px;
+}
+
+.name-letter-reveal span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+}
+
+.universe-headline {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--soft-blush);
+  margin: 2px 0 10px;
+}
+
+.universe-copy {
+  font-family: var(--font-serif);
+  font-size: 16.5px;
+  line-height: 1.48;
+  color: var(--ivory-muted);
+  margin: 0 0 14px;
+  max-width: 330px;
+}
+
+.universe-copy p {
+  margin: 0 0 6px;
+}
+
+.continue-star-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 0;
+  color: var(--champagne-gold);
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.continue-star-orb {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(243, 213, 155, 0.38) 0%, rgba(242, 140, 177, 0.14) 60%, transparent 100%);
+  box-shadow: 0 0 26px rgba(243, 213, 155, 0.55);
+  animation: starFloat 2.8s ease-in-out infinite;
+}
+
+@keyframes starFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.07); }
+}
+
+/* ============================================================================
+   SCENE 03 — 24 FLOWERS FOR 24 BEAUTIFUL YEARS
+   ============================================================================ */
+
+.scene-title {
+  font-family: var(--font-script);
+  font-size: clamp(30px, 8vw, 38px);
+  color: var(--champagne-gold);
+  margin: 0 0 4px;
+  line-height: 1.15;
+}
+
+.scene-sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--ivory-muted);
+  margin: 0 0 10px;
+}
+
+.garden-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.bloom-counter {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(242, 140, 177, 0.16);
+  border: 1px solid rgba(242, 140, 177, 0.35);
+  color: var(--soft-blush);
+}
+
+.garden-quick-btn {
+  font-size: 11px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 213, 155, 0.35);
+  background: rgba(33, 17, 56, 0.72);
+  color: var(--champagne-gold);
+  cursor: pointer;
+}
+
+.garden-stage {
+  position: relative;
+  width: min(92vw, 360px);
+  height: 332px;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(200, 182, 255, 0.22);
+  background:
+    radial-gradient(circle at 50% 20%, rgba(200, 182, 255, 0.14), transparent 55%),
+    linear-gradient(180deg, #120822 0%, #1c0f32 62%, #131c24 100%);
+  box-shadow: inset 0 -24px 44px rgba(10, 18, 22, 0.7), 0 16px 38px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+.garden-ground-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44%;
+  background: radial-gradient(ellipse at 50% 90%, rgba(242, 140, 177, 0.2), rgba(74, 128, 102, 0.16) 52%, transparent 80%);
+  pointer-events: none;
+}
+
+.flower-slot {
+  position: absolute;
+  width: 44px;
+  height: 58px;
+  transform: translate(-50%, -100%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: left 1.15s var(--ease-cinematic), top 1.15s var(--ease-cinematic), transform 0.35s ease;
+}
+
+.flower-slot .seed-mound {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 213, 155, 0.9), rgba(242, 140, 177, 0.35));
+  box-shadow: 0 0 12px rgba(243, 213, 155, 0.8);
+  animation: pulseSeed 2s ease-in-out infinite;
+}
+
+.flower-slot.is-bloomed .seed-mound {
+  opacity: 0;
+  animation: none;
+}
+
+.flower-slot svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: scale(0);
+  transform-origin: 50% 92%;
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.flower-slot.is-bloomed svg {
+  transform: scale(1);
+}
+
+.flower-slot.is-bloomed:active svg {
+  transform: scale(1.16);
+}
+
+@keyframes pulseSeed {
+  0%, 100% { transform: translateX(-50%) scale(0.9); opacity: 0.65; }
+  50% { transform: translateX(-50%) scale(1.25); opacity: 1; }
+}
+
+.flower-wish-card {
+  width: min(92vw, 360px);
+  min-height: 72px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(29, 15, 51, 0.72);
+  border: 1px solid rgba(243, 213, 155, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flower-wish-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--champagne-gold);
+  margin: 0 0 2px;
+}
+
+.flower-wish-note {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ivory-muted);
+  margin: 0;
+}
+
+/* ============================================================================
+   SCENE 04 — OUR LITTLE UNIVERSE
+   ============================================================================ */
+
+.universe-scene-frame {
+  position: relative;
+  width: min(92vw, 370px);
+  height: 375px;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(243, 213, 155, 0.26);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
+  background: linear-gradient(180deg, #0d0720 0%, #1d1240 52%, #131b36 100%);
+}
+
+.universe-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scene04-msg-box {
+  width: min(92vw, 360px);
+  min-height: 62px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: rgba(24, 12, 43, 0.76);
+  border: 1px solid rgba(200, 182, 255, 0.28);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15.5px;
+  line-height: 1.4;
+  color: var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cloud-drift-slow {
+  animation: cloudDrift 18s ease-in-out infinite alternate;
+}
+
+.cloud-drift-fast {
+  animation: cloudDrift 13s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes cloudDrift {
+  0% { transform: translateX(-14px); }
+  100% { transform: translateX(18px); }
+}
+
+.couple-breathe {
+  transform-origin: 185px 255px;
+  animation: coupleBreathe 4.2s ease-in-out infinite;
+}
+
+@keyframes coupleBreathe {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  50% { transform: scaleY(1.015) translateY(-1.5px); }
+}
+
+.lake-shimmer {
+  animation: lakeShimmer 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes lakeShimmer {
+  0% { opacity: 0.45; transform: scaleX(0.96); }
+  100% { opacity: 0.85; transform: scaleX(1.04); }
+}
+
+/* ============================================================================
+   SCENE 05 — MY FUTURE DOCTOR
+   ============================================================================ */
+
+.doctor-stage {
+  position: relative;
+  width: min(92vw, 370px);
+  height: 205px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(243, 213, 155, 0.28);
+  background: radial-gradient(circle at 72% 28%, rgba(243, 213, 155, 0.16), transparent 52%),
+              linear-gradient(180deg, #180d2c 0%, #24133e 100%);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.48);
+}
+
+.doctor-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.doctor-badge-pill {
+  margin-top: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(243, 213, 155, 0.24), rgba(242, 140, 177, 0.18));
+  border: 1px solid rgba(243, 213, 155, 0.65);
+  color: var(--champagne-gold);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 0 22px rgba(243, 213, 155, 0.28);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s var(--ease-cinematic);
+}
+
+.doctor-badge-pill.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ecg-strip {
+  width: min(90vw, 350px);
+  height: 46px;
+  margin: 4px auto 2px;
+}
+
+.doctor-story-box {
+  width: min(92vw, 360px);
+  margin-top: 4px;
+  padding: 9px 14px;
+  border-radius: 18px;
+  background: rgba(23, 12, 41, 0.72);
+  border: 1px solid rgba(200, 182, 255, 0.22);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  line-height: 1.36;
+  color: var(--ivory-muted);
+  text-align: left;
+  max-height: 248px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(242, 140, 177, 0.35) transparent;
+}
+
+.doctor-story-box::-webkit-scrollbar {
+  width: 4px;
+}
+.doctor-story-box::-webkit-scrollbar-thumb {
+  background: rgba(242, 140, 177, 0.35);
+  border-radius: 99px;
+}
+
+.doctor-story-box p {
+  margin: 0 0 7px;
+}
+
+.doctor-story-box p:last-child {
+  margin-bottom: 0;
+  color: var(--soft-blush);
+  font-style: italic;
+}
+
+/* ============================================================================
+   SCENE 06 — SPECIAL BIRTHDAY PRESCRIPTION
+   ============================================================================ */
+
+.rx-paper {
+  position: relative;
+  width: min(92vw, 356px);
+  padding: 18px 18px 20px;
+  border-radius: 18px;
+  background: linear-gradient(165deg, #fffaf3 0%, #f8ede0 100%);
+  color: #36213e;
+  text-align: left;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55), inset 0 0 0 2px rgba(217, 167, 92, 0.42);
+  overflow: hidden;
+}
+
+.rx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid rgba(139, 86, 122, 0.28);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.rx-symbol {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 700;
+  color: #b44374;
+  line-height: 1;
+}
+
+.rx-clinic {
+  text-align: right;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7c5674;
+}
+
+.rx-meta {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  color: #3f2847;
+}
+
+.rx-meta strong {
+  color: #8f2d59;
+}
+
+.rx-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rx-item {
+  font-family: var(--font-hand);
+  font-size: 17px;
+  line-height: 1.25;
+  color: #3b234a;
+  padding-left: 18px;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.rx-item::before {
+  content: "♡";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #d95f8b;
+  font-size: 13px;
+}
+
+.rx-footer {
+  border-top: 1px dashed rgba(139, 86, 122, 0.3);
+  padding-top: 8px;
+  padding-right: 78px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #55395e;
+}
+
+.rx-stamp {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 66px;
+  height: 66px;
+  opacity: 0;
+  transform: scale(1.7) rotate(-18deg);
+  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.rx-stamp.stamped {
+  opacity: 0.92;
+  transform: scale(1) rotate(-10deg);
+}
+
+.rx-pen-nib {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* ============================================================================
+   SCENE 07 — INTERACTIVE BIRTHDAY CAKE
+   ============================================================================ */
+
+.cake-stage {
+  position: relative;
+  width: min(90vw, 340px);
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0 8px;
+}
+
+.cake-glow-halo {
+  position: absolute;
+  top: 10px;
+  width: 230px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 206, 120, 0.36) 0%, rgba(242, 140, 177, 0.14) 55%, transparent 78%);
+  pointer-events: none;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.cake-stage.candles-out .cake-glow-halo {
+  opacity: 0.08;
+  transform: scale(0.75);
+}
+
+.cake-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.candle-flame {
+  transform-origin: center bottom;
+  animation: flameFlicker 0.28s ease-in-out infinite alternate;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.cake-stage.candles-out .candle-flame {
+  opacity: 0;
+  transform: scale(0.2);
+}
+
+@keyframes flameFlicker {
+  0% { transform: scaleY(1) skewX(-2deg); }
+  100% { transform: scaleY(1.12) skewX(3deg); }
+}
+
+.cake-prompts {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ivory);
+  margin: 0 0 12px;
+}
+
+.cake-prompts .wish-sub {
+  display: block;
+  font-style: italic;
+  color: var(--champagne-gold);
+  margin-top: 2px;
+}
+
+.balloon-float {
+  animation: balloonBob 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes balloonBob {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-9px); }
+}
+
+/* ============================================================================
+   SCENE 08 — A SECRET LOVE LETTER
+   ============================================================================ */
+
+.letter-stage {
+  width: min(92vw, 360px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.letter-sealed-box {
+  width: min(80vw, 280px);
+  padding: 20px 16px;
+  border-radius: 20px;
+  background: linear-gradient(155deg, rgba(253, 248, 242, 0.12), rgba(242, 140, 177, 0.14));
+  border: 1px solid rgba(243, 213, 155, 0.35);
+  cursor: pointer;
+  transition: transform 0.35s ease;
+}
+
+.letter-sealed-box:active {
+  transform: scale(0.97);
+}
+
+.letter-paper {
+  display: none;
+  width: 100%;
+  max-height: 60dvh;
+  overflow-y: auto;
+  padding: 18px 16px;
+  border-radius: 18px;
+  background: linear-gradient(170deg, #fffaf4 0%, #f9efe2 100%);
+  color: #36213e;
+  text-align: left;
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.55), inset 0 0 0 1.5px rgba(217, 167, 92, 0.35);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180, 67, 116, 0.35) transparent;
+}
+
+.letter-paper::-webkit-scrollbar {
+  width: 4px;
+}
+.letter-paper::-webkit-scrollbar-thumb {
+  background: rgba(180, 67, 116, 0.35);
+  border-radius: 99px;
+}
+
+.letter-paper.is-open {
+  display: block;
+  animation: unfoldLetter 0.7s var(--ease-cinematic) forwards;
+}
+
+@keyframes unfoldLetter {
+  0% { opacity: 0; transform: perspective(700px) rotateX(-24deg) scaleY(0.84); }
+  100% { opacity: 1; transform: perspective(700px) rotateX(0deg) scaleY(1); }
+}
+
+.letter-body {
+  font-family: var(--font-hand);
+  font-size: 16.5px;
+  line-height: 1.42;
+  color: #3b234a;
+}
+
+.letter-body p {
+  margin: 0 0 10px;
+}
+
+.letter-signature-wrap {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.letter-signature-svg {
+  width: 145px;
+  height: 52px;
+}
+
+/* ============================================================================
+   SCENE 09 — A VIRTUAL HUG
+   ============================================================================ */
+
+.hug-stage {
+  position: relative;
+  width: min(92vw, 360px);
+  height: 270px;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(242, 140, 177, 0.3);
+  background: radial-gradient(circle at 50% 45%, rgba(242, 140, 177, 0.18), rgba(20, 11, 36, 0.92) 72%);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  margin: 8px 0 14px;
+}
+
+.hug-stage.is-hugging {
+  background: radial-gradient(circle at 50% 45%, rgba(242, 140, 177, 0.38), rgba(243, 213, 155, 0.16) 45%, rgba(20, 11, 36, 0.94) 80%);
+}
+
+.hug-char-left,
+.hug-char-right {
+  transition: transform 1.25s var(--ease-cinematic);
+}
+
+.hug-stage.is-hugging .hug-char-left {
+  transform: translateX(70px);
+}
+
+.hug-stage.is-hugging .hug-char-right {
+  transform: translateX(-70px);
+}
+
+.hug-message-box {
+  font-family: var(--font-serif);
+  font-size: 16.5px;
+  line-height: 1.45;
+  color: var(--ivory-muted);
+  max-width: 330px;
+  min-height: 56px;
+  margin-top: 10px;
+}
+
+/* ============================================================================
+   SCENE 10 — THE GRAND FINALE
+   ============================================================================ */
+
+.finale-stage {
+  position: relative;
+  width: min(92vw, 370px);
+  height: 230px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(243, 213, 155, 0.34);
+  background: linear-gradient(180deg, #0d061c 0%, #1d1035 64%, #151d2a 100%);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+  margin-bottom: 10px;
+}
+
+.finale-titles h2 {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--soft-blush);
+  margin: 0;
+}
+
+.finale-titles h1 {
+  font-family: var(--font-script);
+  font-size: clamp(34px, 9vw, 44px);
+  color: var(--champagne-gold);
+  margin: 2px 0 4px;
+  line-height: 1.1;
+}
+
+.finale-tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--lavender);
+  margin: 0 0 8px;
+}
+
+.finale-credits {
+  font-size: 13px;
+  color: var(--ivory-muted);
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+.finale-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.finale-secret-box {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(242, 140, 177, 0.14);
+  border: 1px solid rgba(243, 213, 155, 0.42);
+  font-family: var(--font-serif);
+  font-size: 15.5px;
+  line-height: 1.45;
+  color: var(--ivory);
+  display: none;
+}
+
+.finale-secret-box.visible {
+  display: block;
+  animation: fadeUpIn 0.6s var(--ease-cinematic) forwards;
+}
+
+@keyframes fadeUpIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.replay-btn {
+  padding: 11px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 182, 255, 0.4);
+  background: rgba(29, 15, 51, 0.72);
+  color: var(--ivory);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ============================================================================
+   HIDDEN HEART EASTER EGG & OPTIONAL MEMORY PHOTO OVERLAY
+   ============================================================================ */
+
+.hidden-heart-trigger {
+  position: fixed;
+  right: calc(14px + var(--safe-right));
+  bottom: calc(64px + var(--safe-bottom));
+  z-index: 40;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.32;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hidden-heart-trigger:hover,
+.hidden-heart-trigger:active {
+  opacity: 0.95;
+  transform: scale(1.2);
+}
+
+.photos-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(12, 6, 22, 0.88);
+  backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.photos-modal.open {
+  display: flex;
+}
+
+.photos-modal-card {
+  width: min(92vw, 380px);
+  max-height: 82dvh;
+  overflow-y: auto;
+  background: var(--bg-velvet);
+  border: 1px solid rgba(243, 213, 155, 0.35);
+  border-radius: 22px;
+  padding: 18px;
+  text-align: center;
+}
+
+.photos-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.photo-frame {
+  background: #fdf8f2;
+  padding: 8px 8px 14px;
+  border-radius: 10px;
+  color: #36213e;
+}
+
+.photo-frame img {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+.photo-frame span {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-hand);
+  font-size: 16px;
+}
+
+/* ============================================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+  }
+}
+
+/* ============================================================================
+   DESKTOP / TABLET REFINEMENTS
+   ============================================================================ */
+
+@media (min-width: 768px) {
+  .scene-inner {
+    max-width: 520px;
+  }
+
+  .garden-stage,
+  .universe-scene-frame,
+  .doctor-stage,
+  .hug-stage,
+  .finale-stage {
+    width: 440px;
+  }
+
+  .garden-stage {
+    height: 365px;
+  }
+
+  .universe-scene-frame {
+    height: 400px;
+  }
+}
